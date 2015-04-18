@@ -1,0 +1,9 @@
+{
+    "attributes": {
+        "wicket:id": {}
+    },
+    "elements": {
+        "wicket:extend": {},
+        "wicket:panel": {}
+    }
+}

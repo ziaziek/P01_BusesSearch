@@ -1,0 +1,33 @@
+<wicket:panel>
+    <style>
+        .loginpanel {
+            position: relative;
+            top:25px;
+            width: 25%;
+            margin-left: 32%;
+            background-color:  activeborder;
+            padding: 10px;
+            font-family: Helvetica;
+            border-radius: 5px;
+            border-color:  cornflowerblue;
+        }
+        
+    </style>
+    <fieldset name="Login" class="loginpanel">
+        <legend>Login</legend>
+        <form wicket:id="signInForm">
+            <table width="100%">
+                <tr>
+                    <td><label for="username">Username</label></td><td><input wicket:id="username" type="text" name="username" id="username"/></td>
+                </tr>
+                <tr>
+                    <td><label for="password">Password</label></td><td><input wicket:id="password" type="password" name="password" id="password"/></td>
+                </tr>
+                <tr>
+                    <td></td><td><input type="submit" value="Submit" style="float:right;"/></td>
+                </tr>
+            </table>   
+        </form>
+    </fieldset>
+    <span wicket:id="loggedInInfo"></span>
+</wicket:panel>
