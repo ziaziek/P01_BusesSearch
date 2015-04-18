@@ -54,7 +54,8 @@ public class SearchPanel extends Panel{
             }
         });
         
-        //this dropdown picks up data once the previous has selected the station from
+        //this dropdown picks up data once the previous has selected the station from.
+        //Initially fill it up with an empty list
         form.add(createStationsToDropDownChoice(Model.of(Collections.EMPTY_LIST)));
         
         form.add(new Button("submit"){
