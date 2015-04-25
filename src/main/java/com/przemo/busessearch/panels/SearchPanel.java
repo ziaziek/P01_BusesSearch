@@ -5,86 +5,56 @@
  */
 package com.przemo.busessearch.panels;
 
-import com.przemo.busessearch.services.DefaultStationsService;
+import com.przemo.busessearchinterfaces.data.Line;
 import com.przemo.busessearchinterfaces.data.Station;
-import com.przemo.busessearchinterfaces.interfaces.IStationsService;
-import java.util.Collections;
+import com.przemo.busessearchinterfaces.interfaces.ILinesService;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
  *
  * @author Przemo
  */
-public class SearchPanel extends Panel{
+public class SearchPanel extends Panel {
 
-    private DropDownChoice stationTo;
+    @SpringBean
+    private ILinesService lineService;
 
-    private final IStationsService stationsService;
-    
-    private final IModel<Station> stationsModel;
-    
+    private IModel<Line> results = new Model<>();
+
+    private Station[] stations = new Station[2];
+
+    private static final String resultsComponentId = "results";
+
+    final WebMarkupContainer resPanel;
+
     public SearchPanel(String id) {
         super(id);
-        
-        stationsService = new DefaultStationsService();
-        stationsModel = new Model<>();
-        
         Form form = new Form("busesSearch");
+        resPanel = new SearchResultsPanel(resultsComponentId, new CompoundPropertyModel<>(results)) {
+        };
+        resPanel.setVisible(results.getObject()!=null);
+        final SearchStationsPanel stationsPanel = new SearchStationsPanel("stations", new PropertyModel<Station>(this, "stations.0"), new PropertyModel<Station>(this, "stations.1"));
+        form.add(stationsPanel);
         add(form);
-        
-        form.add(new DropDownChoice("stationFrom",  stationsModel, stationsService.getAllStations(), 
-        new StationsChoiceRenderer()){
+        add(resPanel);
 
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
+        form.add(new Button("submit") {
             
             @Override
-            protected void onSelectionChanged(Object StationFrom){
-                if(StationFrom!=null && StationFrom instanceof Station){
-                   stationTo.setChoices(stationsService.getAvailableStationsFrom((Station) StationFrom)); 
-                }
-            }
-        });
-        
-        //this dropdown picks up data once the previous has selected the station from.
-        //Initially fill it up with an empty list
-        form.add(createStationsToDropDownChoice(Model.of(Collections.EMPTY_LIST)));
-        
-        form.add(new Button("submit"){
-
-            @Override
             public void onSubmit() {
-                super.onSubmit(); //To change body of generated methods, choose Tools | Templates.
+                super.onSubmit();
+                results.setObject(lineService.getLineForStations(stations[0], stations[1]));
+                resPanel.setVisible(results.getObject()!=null);
             }
-           
+
         });
-    }
-
-    private DropDownChoice createStationsToDropDownChoice(IModel model){
-        stationTo = new DropDownChoice("stationTo", model, new StationsChoiceRenderer());
-        return stationTo;
-    }
-    
-    
-    private class StationsChoiceRenderer implements IChoiceRenderer<Station>{
-
-        @Override
-        public Object getDisplayValue(Station object) {
-            return object.getName();
-        }
-
-        @Override
-        public String getIdValue(Station object, int index) {
-            return String.valueOf(object.getId());
-        }
-        
     }
 }

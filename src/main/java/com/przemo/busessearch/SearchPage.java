@@ -12,10 +12,15 @@ import com.przemo.busessearch.panels.SearchPanel;
  * @author Przemo
  */
 public class SearchPage extends BasePage {
-
+    
+    public SearchPage(){
+        super();
+    }
+    
     @Override
     protected void initialisePaageContent() {
         add(new SearchPanel("searchPanel"));
+        //add(new SearchResultsPanel("resultsPanel", null));
     }
     
     

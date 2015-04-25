@@ -2,7 +2,9 @@
     <h3>Search Panel.</h3>
     <p>Define criteria of your search to find a route and its details</p>
     <form wicket:id="busesSearch">
-        <select wicket:id="stationFrom"></select>&nbsp;<select wicket:id="stationTo"></select><br/><br/>
+        <span wicket:id="stations"></span>
         <input type="submit" wicket:id="submit"/>
     </form>
+    <div wicket:id="results">
+    </div>
 </wicket:panel>

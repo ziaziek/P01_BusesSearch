@@ -10,11 +10,13 @@ import com.przemo.busessearchinterfaces.interfaces.IStationsService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Przemo
  */
+@Service
 public class DefaultStationsService implements IStationsService, Serializable{
 
     @Override
