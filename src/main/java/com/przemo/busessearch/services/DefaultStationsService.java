@@ -5,7 +5,7 @@
  */
 package com.przemo.busessearch.services;
 
-import com.przemo.busessearchinterfaces.data.Station;
+import com.przemo.busessearchinterfaces.data.Stations;
 import com.przemo.busessearchinterfaces.interfaces.IStationsService;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,18 +20,18 @@ import org.springframework.stereotype.Service;
 public class DefaultStationsService implements IStationsService, Serializable{
 
     @Override
-    public List<Station> getAllStations() {
-         List<Station> stations = new ArrayList<>();
-        stations.add(new Station(1, "Trzcianka"));
-        stations.add(new Station(2, "Poznań"));
-        stations.add(new Station(3, "Piła"));
+    public List<Stations> getAllStations() {
+         List<Stations> stations = new ArrayList<>();
+        stations.add(new Stations(1, "Trzcianka"));
+        stations.add(new Stations(2, "Poznań"));
+        stations.add(new Stations(3, "Piła"));
         return stations;
     }
 
     @Override
-    public List<Station> getAvailableStationsFrom(Station stationFrom) {
-        List<Station> stations = getAllStations();
-        for(Station s: stations){
+    public List<Stations> getAvailableStationsFrom(Stations stationFrom) {
+        List<Stations> stations = getAllStations();
+        for(Stations s: stations){
             if(s.getName().equals(stationFrom.getName())){
                 stations.remove(s);
                 break;
@@ -41,7 +41,7 @@ public class DefaultStationsService implements IStationsService, Serializable{
     }
 
     @Override
-    public List<Station> getAvailableStationsTo(Station stationTo) {
+    public List<Stations> getAvailableStationsTo(Stations stationTo) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

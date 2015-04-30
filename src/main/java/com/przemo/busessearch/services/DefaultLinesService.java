@@ -5,8 +5,9 @@
  */
 package com.przemo.busessearch.services;
 
-import com.przemo.busessearchinterfaces.data.Line;
-import com.przemo.busessearchinterfaces.data.Station;
+import com.przemo.busessearchinterfaces.data.Buses;
+import com.przemo.busessearchinterfaces.data.Lines;
+import com.przemo.busessearchinterfaces.data.Stations;
 import com.przemo.busessearchinterfaces.interfaces.ILinesService;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,14 @@ import org.springframework.stereotype.Service;
 public class DefaultLinesService implements ILinesService{
 
     @Override
-    public Line getLineForStations(Station stationFrom, Station stationTo) {
-        Line ret = null;
+    public Lines getLineForStations(Stations stationFrom, Stations stationTo) {
+        Lines ret = null;
         if(stationFrom!=null && stationTo!=null && stationFrom.getName().equalsIgnoreCase("trzcianka") && stationTo.getName().equalsIgnoreCase("Piła")){
-           ret = new Line();
-           ret.setIdBus(1);
-           ret.setDescription("Trzcianka-Piła");
+           ret = new Lines();
+           Buses b = new Buses();
+           b.setId(1);
+           ret.setBuses(b);
+           ret.setDecription("Trzcianka-Piła");
         }
         return ret;
     }

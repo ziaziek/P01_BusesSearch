@@ -5,8 +5,8 @@
  */
 package com.przemo.busessearch.services;
 
-import com.przemo.busessearchinterfaces.data.Route;
-import com.przemo.busessearchinterfaces.data.Station;
+import com.przemo.busessearchinterfaces.data.Routes;
+import com.przemo.busessearchinterfaces.data.Stations;
 import com.przemo.busessearchinterfaces.interfaces.IRoutesService;
 
 /**
@@ -16,7 +16,7 @@ import com.przemo.busessearchinterfaces.interfaces.IRoutesService;
 public class DefaultRoutesService implements IRoutesService{
 
     @Override
-    public Route findRoutesBetween(Station stationFrom, Station stationTo) {
+    public Routes findRoutesBetween(Stations stationFrom, Stations stationTo) {
         return null;
     }
     

@@ -5,7 +5,7 @@
  */
 package com.przemo.busessearch.panels;
 
-import com.przemo.busessearchinterfaces.data.Station;
+import com.przemo.busessearchinterfaces.data.Stations;
 import com.przemo.busessearchinterfaces.interfaces.IStationsService;
 import java.util.Collections;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -27,9 +27,9 @@ public class SearchStationsPanel extends Panel {
     
     private DropDownChoice stationTo;
 
-    private final IModel<Station> modelStationFrom, modelStationTo;
+    private final IModel<Stations> modelStationFrom, modelStationTo;
     
-    public SearchStationsPanel(String id, IModel<Station> modelStationFrom, IModel<Station> modelStationTo) {
+    public SearchStationsPanel(String id, IModel<Stations> modelStationFrom, IModel<Stations> modelStationTo) {
         super(id);
         this.modelStationFrom=modelStationFrom;
         this.modelStationTo=modelStationTo;
@@ -37,7 +37,7 @@ public class SearchStationsPanel extends Panel {
     }
 
     private void buildPanel() {
-        Form<Station> form = new Form<>("form");
+        Form<Stations> form = new Form<>("form");
         form.add(new DropDownChoice("stationFrom", modelStationFrom, stationsService.getAllStations(),
                 new StationsChoiceRenderer()) {
 
@@ -48,8 +48,8 @@ public class SearchStationsPanel extends Panel {
 
                     @Override
                     protected void onSelectionChanged(Object StationFrom) {
-                        if (StationFrom != null && StationFrom instanceof Station) {
-                            stationTo.setChoices(stationsService.getAvailableStationsFrom((Station) StationFrom));
+                        if (StationFrom != null && StationFrom instanceof Stations) {
+                            stationTo.setChoices(stationsService.getAvailableStationsFrom((Stations) StationFrom));
                         }
                     }
                 }
@@ -63,21 +63,21 @@ public class SearchStationsPanel extends Panel {
 
     }
     
-    private DropDownChoice createStationsToDropDownChoice(final IModel<Station> model) {
+    private DropDownChoice createStationsToDropDownChoice(final IModel<Stations> model) {
         stationTo = new DropDownChoice("stationTo", modelStationTo, Collections.EMPTY_LIST, new StationsChoiceRenderer()) {
         };
         return stationTo;
     }
 
-    class StationsChoiceRenderer implements IChoiceRenderer<Station> {
+    class StationsChoiceRenderer implements IChoiceRenderer<Stations> {
 
         @Override
-        public Object getDisplayValue(Station object) {
+        public Object getDisplayValue(Stations object) {
             return object.getName();
         }
 
         @Override
-        public String getIdValue(Station object, int index) {
+        public String getIdValue(Stations object, int index) {
             return String.valueOf(object.getId());
         }
 

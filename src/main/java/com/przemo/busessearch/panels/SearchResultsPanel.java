@@ -5,7 +5,7 @@
  */
 package com.przemo.busessearch.panels;
 
-import com.przemo.busessearchinterfaces.data.Line;
+import com.przemo.busessearchinterfaces.data.Lines;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -16,9 +16,9 @@ import org.apache.wicket.model.IModel;
  */
 public class SearchResultsPanel extends Panel {
     
-    private IModel<Line> model;
+    private IModel<Lines> model;
     
-    public SearchResultsPanel(String id, IModel<Line> model) {
+    public SearchResultsPanel(String id, IModel<Lines> model) {
         super(id, model);
         this.model=model;
         buildPanel();
