@@ -38,9 +38,7 @@ public class SearchPanel extends Panel {
     public SearchPanel(String id) {
         super(id);
         Form form = new Form("busesSearch");
-        resPanel = new SearchResultsPanel(resultsComponentId, new CompoundPropertyModel<>(results)) {
-        };
-        resPanel.setVisible(results.getObject()!=null);
+        resPanel = new WebMarkupContainer(resultsComponentId);
         final SearchStationsPanel stationsPanel = new SearchStationsPanel("stations", new PropertyModel<Stations>(this, "stations.0"), new PropertyModel<Stations>(this, "stations.1"));
         form.add(stationsPanel);
         add(form);
@@ -50,9 +48,9 @@ public class SearchPanel extends Panel {
             
             @Override
             public void onSubmit() {
-                super.onSubmit();
-                results.setObject(lineService.getLineForStations(stations[0], stations[1]));
-                resPanel.setVisible(results.getObject()!=null);
+                results = new CompoundPropertyModel<>(lineService.getLineForStations(stations[0], stations[1]));
+                System.out.println("Results object ready? "+(results.getObject()!=null));
+                resPanel.replaceWith(new SearchResultsPanel(resultsComponentId, results));
             }
 
         });

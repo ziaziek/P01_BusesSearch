@@ -6,10 +6,11 @@
 package com.przemo.busessearch.model;
 
 import com.przemo.busessearchinterfaces.data.HibernateUtil;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 /**
  *
@@ -24,12 +25,9 @@ public class SessionFactoryBean {
     }
     
     @Bean
-    public Session getCurrentSession(){
-        if(HibernateUtil.getSessionFactory().getCurrentSession()==null || !HibernateUtil.getSessionFactory().getCurrentSession().isOpen()){
-            return HibernateUtil.getSessionFactory().openSession();
-        } else {
-           return HibernateUtil.getSessionFactory().getCurrentSession(); 
-        }      
+    @Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public org.hibernate.Session getNewSession(){
+        return HibernateUtil.openNewSession(); 
     }
     
     

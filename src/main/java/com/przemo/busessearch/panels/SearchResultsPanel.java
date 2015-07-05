@@ -21,15 +21,8 @@ public class SearchResultsPanel extends Panel {
     public SearchResultsPanel(String id, IModel<Lines> model) {
         super(id, model);
         this.model=model;
+        setDefaultModel(model);
         buildPanel();
-    }
-
-    @Override
-    protected void onConfigure() {
-        super.onConfigure(); //To change body of generated methods, choose Tools | Templates.
-        if(model==null || model.getObject()==null){
-            setVisible(false);
-        }
     }
     
     public SearchResultsPanel(String id){
@@ -38,8 +31,8 @@ public class SearchResultsPanel extends Panel {
     }
     
     private void buildPanel(){
-                 add(new Label("idBus"));
-                add(new Label("description"));
+                 add(new Label("id"));
+                add(new Label("decription"));
            
     }
     
