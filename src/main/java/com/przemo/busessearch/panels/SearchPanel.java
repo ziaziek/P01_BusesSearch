@@ -5,16 +5,12 @@
  */
 package com.przemo.busessearch.panels;
 
-import com.przemo.busessearchinterfaces.data.Lines;
 import com.przemo.busessearchinterfaces.data.Stations;
 import com.przemo.busessearchinterfaces.interfaces.ILinesService;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -26,9 +22,7 @@ public class SearchPanel extends Panel {
 
     @SpringBean
     private ILinesService lineService;
-
-    private IModel<Lines> results = new Model<>();
-
+    
     private Stations[] stations = new Stations[2];
 
     private static final String resultsComponentId = "results";
@@ -48,9 +42,7 @@ public class SearchPanel extends Panel {
             
             @Override
             public void onSubmit() {
-                results = new CompoundPropertyModel<>(lineService.getLineForStations(stations[0], stations[1]));
-                System.out.println("Results object ready? "+(results.getObject()!=null));
-                resPanel.replaceWith(new SearchResultsPanel(resultsComponentId, results));
+                resPanel.replaceWith(new SearchResultsPanel(resultsComponentId,lineService.getLinesForStations(stations[0], stations[1] )));
             }
 
         });

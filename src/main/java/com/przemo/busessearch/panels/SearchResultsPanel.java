@@ -6,9 +6,11 @@
 package com.przemo.busessearch.panels;
 
 import com.przemo.busessearchinterfaces.data.Lines;
+import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 
 /**
  *
@@ -16,23 +18,24 @@ import org.apache.wicket.model.IModel;
  */
 public class SearchResultsPanel extends Panel {
     
-    private IModel<Lines> model;
+    private final List<Lines> lines;
     
-    public SearchResultsPanel(String id, IModel<Lines> model) {
-        super(id, model);
-        this.model=model;
-        setDefaultModel(model);
-        buildPanel();
-    }
-    
-    public SearchResultsPanel(String id){
-        super(id, null);
+    public SearchResultsPanel(String id, List<Lines> lines) {
+        super(id);
+        this.lines=lines;    
         buildPanel();
     }
     
     private void buildPanel(){
-                 add(new Label("id"));
-                add(new Label("decription"));
+        ListView<Lines> lv = new ListView<Lines>("listLines", lines) {
+            
+            @Override
+            protected void populateItem(ListItem item) {
+                add(new Label("id", ((Lines)(item.getModel().getObject())).getId()));
+                add(new Label("decription", ((Lines)(item.getModel().getObject())).getDecription()));
+            }
+        };
+                 
            
     }
     
