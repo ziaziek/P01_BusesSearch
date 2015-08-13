@@ -31,11 +31,13 @@ public class SearchResultsPanel extends Panel {
             
             @Override
             protected void populateItem(ListItem item) {
-                add(new Label("id", ((Lines)(item.getModel().getObject())).getId()));
-                add(new Label("decription", ((Lines)(item.getModel().getObject())).getDecription()));
+                Lines line = (Lines)item.getModelObject();
+                item.add(new Label("id", line.getId()));
+                item.add(new Label("decription", line.getDecription()));
             }
         };
-                 
+         
+        add(lv);
            
     }
     

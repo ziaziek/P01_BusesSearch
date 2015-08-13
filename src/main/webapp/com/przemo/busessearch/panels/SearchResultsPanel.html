@@ -1,9 +1,11 @@
 <wicket:panel>
     <p>Results of your search.</p>
-    <div wicket:id="listLines">
-      <p>
-        Id Bus <span wicket:id="id"></span><br/>
-        Description: <span wicket:id="decription"></span>
-    </p>  
+    <div>
+      <table>
+          <tr><th>Id</th><th>Description</th></tr>
+          <span wicket:id="listLines">
+              <tr><td><span wicket:id="id"></span></td><td><span wicket:id="decription"></span></td></tr>
+          </span>
+    </table>  
     </div> 
 </wicket:panel>

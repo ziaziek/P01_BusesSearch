@@ -21,7 +21,7 @@ public class DefaultLinesService implements ILinesService{
 
     @Override
     public List<Lines> getLinesForStations(Stations stationFrom, Stations stationTo) {
-        return QueryHelper.getListFromSQLQuery(Stations.class, "select pr_get_line_for_stations("+stationFrom.getId()+","+stationTo.getId()+")");
+        return QueryHelper.getListFromSQLQuery(Lines.class, "select * from pr_get_line_for_stations("+stationFrom.getId()+","+stationTo.getId()+")");
     }
     
 }
