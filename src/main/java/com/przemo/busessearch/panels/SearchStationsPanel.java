@@ -8,6 +8,8 @@ package com.przemo.busessearch.panels;
 import com.przemo.busessearchinterfaces.data.Stations;
 import com.przemo.busessearchinterfaces.interfaces.IStationsService;
 import java.util.Collections;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -38,22 +40,17 @@ public class SearchStationsPanel extends Panel {
 
     private void buildPanel() {
         Form<Stations> form = new Form<>("form");
+        
         form.add(new DropDownChoice("stationFrom", modelStationFrom, stationsService.getAllStations(),
-                new StationsChoiceRenderer()) {
-
+                new StationsChoiceRenderer()).add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    
                     @Override
-                    protected boolean wantOnSelectionChangedNotifications() {
-                        return true;
-                    }
-
-                    @Override
-                    protected void onSelectionChanged(Object StationFrom) {
-                        if (StationFrom != null && StationFrom instanceof Stations) {
-                            stationTo.setChoices(stationsService.getAvailableStationsFrom((Stations) StationFrom));
-                        }
+                    protected void onUpdate(AjaxRequestTarget target) {
+                            stationTo.setChoices(stationsService.getAvailableStationsFrom((Stations) modelStationFrom.getObject()));
+                            target.add(stationTo);
                     }
                 }
-        );
+        ));
 
         //this dropdown picks up data once the previous has selected the station from.
         //Initially fill it up with an empty list
