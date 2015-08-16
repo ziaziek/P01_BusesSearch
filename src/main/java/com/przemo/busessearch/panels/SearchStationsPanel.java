@@ -61,8 +61,15 @@ public class SearchStationsPanel extends Panel {
     }
     
     private DropDownChoice createStationsToDropDownChoice(final IModel<Stations> model) {
-        stationTo = new DropDownChoice("stationTo", modelStationTo, Collections.EMPTY_LIST, new StationsChoiceRenderer()) {
-        };
+        stationTo = (DropDownChoice) new DropDownChoice("stationTo", modelStationTo, Collections.EMPTY_LIST, new StationsChoiceRenderer()).add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(stationTo);
+            }
+        });
+        
+        stationTo.setOutputMarkupId(true);
         return stationTo;
     }
 

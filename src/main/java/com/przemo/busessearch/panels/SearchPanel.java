@@ -6,8 +6,10 @@
 package com.przemo.busessearch.panels;
 
 import com.przemo.busessearch.model.SearchResults;
+import com.przemo.busessearchinterfaces.data.Lines;
 import com.przemo.busessearchinterfaces.data.Stations;
 import com.przemo.busessearchinterfaces.interfaces.ILinesService;
+import java.util.List;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -41,6 +43,7 @@ public class SearchPanel extends Panel {
         resPanel.add(new WebMarkupContainer(resultsComponentId));
         final SearchStationsPanel stationsPanel = new SearchStationsPanel("stations", new PropertyModel<Stations>(this, "stations.0"), new PropertyModel<Stations>(this, "stations.1"));
         form.add(stationsPanel); 
+        stationsPanel.setOutputMarkupId(true);
         form.setOutputMarkupId(true);
         resPanel.setOutputMarkupId(true);
         form.add(new AjaxButton("submit", form) {
@@ -53,17 +56,16 @@ public class SearchPanel extends Panel {
             
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                System.out.println("AA");
-                if (stations[0] != null && stations[1] != null) {
-                    IModel<SearchResults> model = new Model<>(new SearchResults(lineService.getLinesForStations(stations[0], stations[1])));
+                List<Lines> res = lineService.getLinesForStations(stations[0], stations[1]);
+                if (stations[0] != null && stations[1] != null && !res.isEmpty() && res.get(0)!=null) {
+                    IModel<SearchResults> model = new Model<>(new SearchResults(res));
                     if (model.getObject().getResult() != null) {
-                        resPanel.addOrReplace(new SearchResultsPanel(resultsComponentId, model));
-                        target.add(resPanel);
+                        resPanel.addOrReplace(new SearchResultsPanel(resultsComponentId, model));                 
                     }
-
-                    System.out.println(stations[0].getName());
-                    System.out.println(stations[1].getName());
+                } else {
+                    resPanel.addOrReplace(new NoResultsAvailablePanel(resultsComponentId));
                 }
+                target.add(resPanel);
             }
         }));
         add(resPanel);
