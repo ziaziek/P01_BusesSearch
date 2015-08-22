@@ -10,24 +10,36 @@ import java.io.Serializable;
 /**
  *
  * @author Przemo
+ * @param <C>
+ * @param <T>
  */
-public class SearchResults implements Serializable {
+public class SearchResults<C, T> implements Serializable {
     
-    private Object result;
+    private SearchCriteria<C> criteria;
+
+    public SearchCriteria getCriteria() {
+        return criteria;
+    }
+
+    public void setCriteria(SearchCriteria criteria) {
+        this.criteria = criteria;
+    }
+    
+    private T result;
 
     public SearchResults(){
         
     }
     
-    public SearchResults(Object result){
+    public SearchResults(T result){
         this.result=result;
     }
     
-    public Object getResult() {
+    public T getResult() {
         return result;
     }
 
-    public void setResult(Object result) {
+    public void setResult(T result) {
         this.result = result;
     }
     

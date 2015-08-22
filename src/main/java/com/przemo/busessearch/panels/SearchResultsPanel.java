@@ -23,7 +23,7 @@ import org.apache.wicket.model.IModel;
  * @author Przemo
  */
 public class SearchResultsPanel extends Panel {
-    
+  
     private ModalWindow modal;
     private static final String modalId = "modal";
     
@@ -49,12 +49,13 @@ public class SearchResultsPanel extends Panel {
             
         };
         add(lv);
-        add(buildModal(null, null));
+        //empty modal not shown at the start
+        add(buildModal(null, null, null));
     }
     
-    private ModalWindow buildModal(String id, IModel model) {
+    private ModalWindow buildModal(String id, String title, IModel<Lines> model) {
         ModalWindow m = new ModalWindow(modalId, model);
-        m.setContent(new TimetablesPanel("content", model));
+        m.setContent(new TimetablesPanel("content", title, (IModel<SearchResults>) getDefaultModel(),  model));
         m.setTitle("Timetables result.");        
         return m;
     }
@@ -70,7 +71,7 @@ public class SearchResultsPanel extends Panel {
         
         @Override
         public void onClick(AjaxRequestTarget target) {
-            modal = buildModal(null, getDefaultModel());
+            modal = buildModal(null, "Line timetable", getDefaultModel());
             SearchResultsPanel.this.addOrReplace(modal);
             modal.show(target);
         }
