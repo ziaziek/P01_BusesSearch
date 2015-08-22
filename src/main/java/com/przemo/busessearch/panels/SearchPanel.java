@@ -60,6 +60,7 @@ public class SearchPanel extends Panel {
                 if (stations[0] != null && stations[1] != null && !res.isEmpty() && res.get(0)!=null) {
                     IModel<SearchResults> model = new Model<>(new SearchResults(res));
                     if (model.getObject().getResult() != null) {
+                        System.out.println(model.getObject().getResult());
                         resPanel.addOrReplace(new SearchResultsPanel(resultsComponentId, model));                 
                     }
                 } else {
