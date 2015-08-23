@@ -6,9 +6,9 @@
 package com.przemo.busessearch.services;
 
 import com.przemo.busessearchinterfaces.data.Stations;
+import com.przemo.busessearchinterfaces.data.helpers.QueryHelper;
 import com.przemo.busessearchinterfaces.interfaces.IStationsService;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +21,7 @@ public class DefaultStationsService implements IStationsService, Serializable{
 
     @Override
     public List<Stations> getAllStations() {
-         List<Stations> stations = new ArrayList<>();
-        stations.add(new Stations(1, "Trzcianka"));
-        stations.add(new Stations(2, "Poznań"));
-        stations.add(new Stations(3, "Piła"));
-        return stations;
+        return QueryHelper.getListFromHQLQuery("from Stations");
     }
 
     @Override

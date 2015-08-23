@@ -46,9 +46,9 @@ public class TimetablesPanel extends Panel {
             
             @Override
             protected void populateItem(ListItem<Timetables> item) {
-                item.add(new Label("station", Model.of(item.getModelObject().getStationsByNodeFrom().getName())));
-                item.add(new Label("arrival", Model.of(item.getModelObject().getArriveAtNodeFrom().toString())));
-                item.add(new Label("departure", Model.of(item.getModelObject().getDepartToNodeTo().toString())));
+                item.add(new Label("station", item.getModelObject().getStationsByNodeFrom().getName()));
+                item.add(new Label("arrival", item.getModelObject().getArriveAtNodeFrom()));
+                item.add(new Label("departure", item.getModelObject().getDepartToNodeTo()));
             }
         };
         
