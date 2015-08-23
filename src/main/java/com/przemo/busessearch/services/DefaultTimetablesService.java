@@ -13,41 +13,47 @@ import com.przemo.busessearchinterfaces.interfaces.ITimetablesService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Przemo
  */
+@Service
 public class DefaultTimetablesService implements ITimetablesService {
 
     @Override
     public List<Timetables> getTimetableForLineStations(Stations stationFrom, Stations stationTo, Lines line) {
-        List<Timetables> tm = QueryHelper.getListFromHQLQuery("from Timetables t where t.lines=" + line
-                + " order by order by coalesce(t.arriveAtNodeFrom, '00:00:00')");
-        if (tm.contains(stationFrom) && tm.contains(stationTo)) {
-            filterOrderedTimetables(tm, stationFrom, stationTo);
+        if (stationFrom != null && stationTo != null && line != null) {
+            List<Timetables> tm = QueryHelper.getListFromHQLQuery("from Timetables t where t.lines.id=" + line.getId()
+                    + " order by coalesce(t.arriveAtNodeFrom, '00:00:00')");
+            if (tm.contains(stationFrom) && tm.contains(stationTo)) {
+                filterOrderedTimetables(tm, stationFrom, stationTo);
+            } else {
+                return Collections.emptyList();
+            }
+            return tm;
         } else {
-            return Collections.emptyList();
+            return Collections.EMPTY_LIST;
         }
-        return tm;
     }
 
-    protected final void filterOrderedTimetables(List<Timetables> tm, Stations stationFrom, Stations stationTo){
+    protected final void filterOrderedTimetables(List<Timetables> tm, Stations stationFrom, Stations stationTo) {
         List<Timetables> aux = new ArrayList<>(tm);
-            boolean fromToSwitch = true;
-            for (Timetables t : aux) {
-                if (fromToSwitch) {
-                    if (t.getStationsByNodeFrom() != stationFrom) {
-                        tm.remove(t);
-                    } else {
-                        fromToSwitch = false;
-                    }
+        boolean fromToSwitch = true;
+        for (Timetables t : aux) {
+            if (fromToSwitch) {
+                if (t.getStationsByNodeFrom() != stationFrom) {
+                    tm.remove(t);
                 } else {
-                    if (t.getStationsByNodeTo() != stationTo) {
-                        tm.remove(t);
-                    }
+                    fromToSwitch = false;
+                }
+            } else {
+                if (t.getStationsByNodeTo() != stationTo) {
+                    tm.remove(t);
                 }
             }
+        }
     }
-    
+
 }

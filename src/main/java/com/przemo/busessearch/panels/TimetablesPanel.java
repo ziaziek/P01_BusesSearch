@@ -10,6 +10,7 @@ import com.przemo.busessearch.model.StationsSearchCriteria;
 import com.przemo.busessearchinterfaces.data.Lines;
 import com.przemo.busessearchinterfaces.data.Timetables;
 import com.przemo.busessearchinterfaces.interfaces.ITimetablesService;
+import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -39,8 +40,9 @@ public class TimetablesPanel extends Panel {
     }
 
     private void buildTimetables() {
-        ListView<Timetables> lv = new ListView<Timetables>("timetable", timetablesService.getTimetableForLineStations(((StationsSearchCriteria)model.getObject().getCriteria()).getSfrom(),
-                                ((StationsSearchCriteria)model.getObject().getCriteria()).getSto(), linesModel.getObject())) {
+        List<Timetables> tlist = timetablesService.getTimetableForLineStations(((StationsSearchCriteria)model.getObject().getCriteria()).getSfrom(),
+                                ((StationsSearchCriteria)model.getObject().getCriteria()).getSto(), linesModel.getObject());
+        ListView<Timetables> lv = new ListView<Timetables>("timetable", tlist) {
             
             @Override
             protected void populateItem(ListItem<Timetables> item) {

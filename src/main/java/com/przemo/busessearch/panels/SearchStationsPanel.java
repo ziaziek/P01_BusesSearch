@@ -5,6 +5,7 @@
  */
 package com.przemo.busessearch.panels;
 
+import com.przemo.busessearch.model.StationsSearchCriteria;
 import com.przemo.busessearchinterfaces.data.Stations;
 import com.przemo.busessearchinterfaces.interfaces.IStationsService;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -29,24 +31,23 @@ public class SearchStationsPanel extends Panel {
     
     private DropDownChoice stationTo;
 
-    private final IModel<Stations> modelStationFrom, modelStationTo;
+    private final IModel<StationsSearchCriteria> searchStations;
     
-    public SearchStationsPanel(String id, IModel<Stations> modelStationFrom, IModel<Stations> modelStationTo) {
+    public SearchStationsPanel(String id, IModel<StationsSearchCriteria> searchCriteria) {
         super(id);
-        this.modelStationFrom=modelStationFrom;
-        this.modelStationTo=modelStationTo;
+        this.searchStations=searchCriteria;
         buildPanel();  
     }
 
     private void buildPanel() {
         Form<Stations> form = new Form<>("form");
         
-        form.add(new DropDownChoice("stationFrom", modelStationFrom, stationsService.getAllStations(),
+        form.add(new DropDownChoice("stationFrom", new PropertyModel<>(searchStations, "sfrom"), stationsService.getAllStations(),
                 new StationsChoiceRenderer()).add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     
                     @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
-                            stationTo.setChoices(stationsService.getAvailableStationsFrom((Stations) modelStationFrom.getObject()));
+                    protected void onUpdate(AjaxRequestTarget target) {                 
+                            stationTo.setChoices(stationsService.getAvailableStationsFrom((Stations) searchStations.getObject().getSfrom()));
                             target.add(stationTo);
                     }
                 }
@@ -61,7 +62,7 @@ public class SearchStationsPanel extends Panel {
     }
     
     private DropDownChoice createStationsToDropDownChoice(final IModel<Stations> model) {
-        stationTo = (DropDownChoice) new DropDownChoice("stationTo", modelStationTo, Collections.EMPTY_LIST, new StationsChoiceRenderer()).add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        stationTo = (DropDownChoice) new DropDownChoice("stationTo", new PropertyModel<>(searchStations, "sto"), Collections.EMPTY_LIST, new StationsChoiceRenderer()).add(new AjaxFormComponentUpdatingBehavior("onchange") {
             
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

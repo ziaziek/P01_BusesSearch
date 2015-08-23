@@ -6,8 +6,8 @@
 package com.przemo.busessearch.panels;
 
 import com.przemo.busessearch.model.SearchResults;
+import com.przemo.busessearch.model.StationsSearchCriteria;
 import com.przemo.busessearchinterfaces.data.Lines;
-import com.przemo.busessearchinterfaces.data.Stations;
 import com.przemo.busessearchinterfaces.interfaces.ILinesService;
 import java.util.List;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -16,9 +16,9 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -29,19 +29,20 @@ public class SearchPanel extends Panel {
 
     @SpringBean
     private ILinesService lineService;
-    
-    private Stations[] stations = new Stations[2];
 
+    private final IModel<SearchResults> resultsModel;
+    
     private static final String resultsComponentId = "results";
     
     final WebMarkupContainer resPanel;
 
     public SearchPanel(String id) {
-        super(id);
+        super(id);   
+        resultsModel = new Model<>(buildModelObject());
         Form<Void> form = new Form<>("busesSearch");
         resPanel = new WebMarkupContainer("resultsContainer");
         resPanel.add(new WebMarkupContainer(resultsComponentId));
-        final SearchStationsPanel stationsPanel = new SearchStationsPanel("stations", new PropertyModel<Stations>(this, "stations.0"), new PropertyModel<Stations>(this, "stations.1"));
+        final SearchStationsPanel stationsPanel = new SearchStationsPanel("stations", new CompoundPropertyModel<>((StationsSearchCriteria)resultsModel.getObject().getCriteria()));
         form.add(stationsPanel); 
         stationsPanel.setOutputMarkupId(true);
         form.setOutputMarkupId(true);
@@ -56,13 +57,11 @@ public class SearchPanel extends Panel {
             
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                List<Lines> res = lineService.getLinesForStations(stations[0], stations[1]);
-                if (stations[0] != null && stations[1] != null && !res.isEmpty() && res.get(0)!=null) {
-                    IModel<SearchResults> model = new Model<>(new SearchResults(res));
-                    if (model.getObject().getResult() != null) {
-                        System.out.println(model.getObject().getResult());
-                        resPanel.addOrReplace(new SearchResultsPanel(resultsComponentId, model));                 
-                    }
+                StationsSearchCriteria crit = (StationsSearchCriteria)resultsModel.getObject().getCriteria();
+                List<Lines> res = lineService.getLinesForStations(crit.getSfrom(), crit.getSto());
+                if (!res.isEmpty() && res.get(0)!=null) {
+                    resultsModel.getObject().setResult(res);
+                    resPanel.addOrReplace(new SearchResultsPanel(resultsComponentId, resultsModel));                 
                 } else {
                     resPanel.addOrReplace(new NoResultsAvailablePanel(resultsComponentId));
                 }
@@ -72,5 +71,11 @@ public class SearchPanel extends Panel {
         add(resPanel);
         add(form);
         
+    }
+    
+    private SearchResults buildModelObject(){
+        SearchResults modelObject = new SearchResults<>();
+        modelObject.setCriteria(new StationsSearchCriteria(null, null));
+        return modelObject;
     }
 }
